@@ -766,7 +766,6 @@ class Quiver(mcollections.PolyCollection):
             tooshort = np.repeat(tooshort, 8, 1)
             np.copyto(X, X1, where=tooshort)
             np.copyto(Y, Y1, where=tooshort)
-    
         return X, Y
 
 
