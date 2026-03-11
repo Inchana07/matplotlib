@@ -766,7 +766,7 @@ class Quiver(mcollections.PolyCollection):
             tooshort = np.repeat(tooshort, 8, 1)
             np.copyto(X, X1, where=tooshort)
             np.copyto(Y, Y1, where=tooshort)
-        # Mask handling is deferred to the caller, _make_verts.
+    
         return X, Y
 
 
