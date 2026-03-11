@@ -19,7 +19,7 @@ import math
 import numpy as np
 from numpy import ma
 
-from matplotlib import _api, cbook, _docstring
+from . import _api, cbook, _docstring
 import matplotlib.artist as martist
 import matplotlib.collections as mcollections
 from matplotlib.patches import CirclePolygon
@@ -502,7 +502,7 @@ class Quiver(mcollections.PolyCollection):
     """
 
     _PIVOT_VALS = ('tail', 'mid','middle', 'tip')
-    _PIVOT_SYNONYMS={'mid':'middle'}
+    _PIVOT_SYNONYMS={'middle':'mid'}
 
     @_docstring.Substitution(_quiver_doc)
     def __init__(self, ax, *args,
@@ -745,14 +745,15 @@ class Quiver(mcollections.PolyCollection):
         # Now select X0, Y0 if short, otherwise X, Y
         np.copyto(X, X0, where=short)
         np.copyto(Y, Y0, where=short)
-        if self.pivot == 'middle':
+        if self.pivot == 'mid' or self.pivot == 'middle':
             X -= 0.5 * X[:, 3, np.newaxis]
+            Y -= 0.5 * Y[:, 3, np.newaxis]
         elif self.pivot == 'tip':
             # numpy bug? using -= does not work here unless we multiply by a
             # float first, as with 'mid'.
-            X = X - X[:, 3, np.newaxis]
-        elif self.pivot != 'tail':
-            _api.check_in_list(self._PIVOT_VALS, pivot=self.pivot)
+            X -= X[:, 3, np.newaxis]
+            Y -= Y[:, 3, np.newaxis]
+        
 
         tooshort = length < self.minlength
         if tooshort.any():
@@ -911,7 +912,7 @@ _docstring.interpd.register(barbs_doc=_barbs_doc)
 
 class Barbs(mcollections.PolyCollection):
     _PIVOT_VALS = ('tail', 'mid', 'middle', 'tip')
-    _PIVOT_SYNONYMS = {'mid': 'middle'}
+    _PIVOT_SYNONYMS = {'middle': 'mid'}
     """
     Specialized PolyCollection for barbs.
 
